@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+        "http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+    <constant name="struts.devMode" value="true"/>
+    <constant name="struts.configuration.xml.reload" value="false"/>
+    <constant name="struts.custom.i18n.resources" value="messageResource"/>
+    <constant name="struts.i18n.encoding" value="UTF-8"/>
+    <constant name="struts.action.extension" value="action,do,jspa,jspx,,"/>
+    <constant name="struts.serve.static" value="true"/>
+    <constant name="struts.serve.static.browserCache" value="false"/>
+    <constant name="struts.ui.theme" value="simple"/>
+    <constant name="struts.enable.SlashesInActionNames" value="true"/>
+    <bean type="org.apache.struts2.dispatcher.multipart.MultiPartRequest" name="merc"
+          class="edu.monash.merc.struts2.multipart.MonitoredMultiPartRequest" scope="default"/>
+    <constant name="struts.multipart.handler" value="merc"/>
+    <constant name="struts.multipart.maxSize" value="2048000000"/>
+    <!-- constant name="struts.multipart.saveDir" value="temp" / -->
+    <package name="core.merc" extends="struts-default">
+        <result-types>
+            <result-type name="freemarker" class="org.apache.struts2.views.freemarker.FreemarkerResult" default="true"/>
+            <result-type name="json" class="org.apache.struts2.json.JSONResult"/>
+            <result-type name="rawtext" class="au.edu.monash.merc.struts2.dispatcher.RawTextResult"/>
+        </result-types>
+
+        <interceptors>
+            <interceptor name="authenInterceptor"
+                         class="edu.monash.merc.struts2.intercepter.AuthenticationInterceptor"/>
+            <interceptor-stack name="noneAuthStack">
+                <interceptor-ref name="defaultStack"/>
+            </interceptor-stack>
+            <interceptor-stack name="authenStack">
+                <interceptor-ref name="defaultStack"/>
+                <interceptor-ref name="authenInterceptor"/>
+            </interceptor-stack>
+        </interceptors>
+        <default-interceptor-ref name="noneAuthStack"/>
+
+        <global-results>
+            <!-- show login -->
+            <result name="login" type="chain">
+                <param name="actionName">showLogin</param>
+                <param name="namespace">/user</param>
+            </result>
+
+            <result name="file_not_found" type="freemarker">/web/404.html</result>
+            <result name="invocation_target_exception" type="freemarker">/web/global/invocation_target_exception.ftl
+            </result>
+        </global-results>
+
+        <global-exception-mappings>
+            <exception-mapping result="file_not_found" exception="java.io.FileNotFoundException"/>
+            <exception-mapping result="invocation_target_exception"
+                               exception="java.lang.reflect.InvocationTargetException"/>
+        </global-exception-mappings>
+
+        <action name="*">
+            <result type="freemarker">/web/{1}.ftl</result>
+        </action>
+
+        <action name="home" class="merc.homeAction" method="home">
+            <result type="freemarker">/web/home.ftl</result>
+        </action>
+
+    </package>
+
+    <package name="core.tl" extends="core.merc" namespace="/tl">
+        <default-interceptor-ref name="noneAuthStack"/>
+
+        <action name="*">
+            <result type="freemarker">/web/tl/{1}.ftl</result>
+        </action>
+
+        <action name="trafficlight" class="tl.tlAction" method="trafficLight">
+            <result name="input">/web/tl/trafficlight.ftl</result>
+            <result name="success">/web/tl/trafficlight.ftl</result>
+        </action>
+
+        <action name="findTpbVersions" class="tl.tlAction" method="findTPBVersions">
+            <result name="success" type="json">
+                <param name="noCache">true</param>
+                <param name="root">tpbVersions</param>
+            </result>
+        </action>
+
+        <!-- view traffic light summary details -->
+        <action name="petlsum" class="tl.tlAction" method="peTlSum">
+            <result name="success" type="json">
+                <param name="noCache">true</param>
+                <param name="root">tlEvidenceResponse</param>
+                <param name="contentType">text/html</param>
+            </result>
+        </action>
+
+        <!-- view  source gene summary -->
+        <action name="srcgsum" class="tl.tlAction" method="srcGeneSum">
+            <result name="success" type="json">
+                <param name="noCache">true</param>
+                <param name="root">tlEvidenceResponse</param>
+                <param name="contentType">text/html</param>
+            </result>
+        </action>
+
+        <!-- view gene evidences -->
+        <action name="viewevidences" class="tl.tlAction" method="viewEvidences">
+            <result name="success" type="json">
+                <param name="noCache">true</param>
+                <param name="root">tlEvidenceResponse</param>
+                <param name="contentType">text/html</param>
+            </result>
+        </action>
+    </package>
+
+    <package name="core.site" extends="core.merc" namespace="/site">
+        <default-interceptor-ref name="noneAuthStack"/>
+        <action name="*">
+            <result type="freemarker">/web/site/{1}.ftl</result>
+        </action>
+
+        <action name="sources" class="site.sourcesAction" method="sources">
+            <result name="input">/web/site/sources.ftl</result>
+            <result name="success">/web/site/sources.ftl</result>
+        </action>
+
+        <action name="docs" class="site.docsAction" method="docs">
+            <result name="input">/web/site/docs.ftl</result>
+            <result name="success">/web/site/docs.ftl</result>
+        </action>
+
+        <action name="faq" class="site.faqAction" method="faq">
+            <result name="input">/web/site/faq.ftl</result>
+            <result name="success">/web/site/faq.ftl</result>
+        </action>
+
+        <action name="contribute" class="site.contributeAction" method="contribute">
+            <result name="input">/web/site/contributors.ftl</result>
+            <result name="success">/web/site/contributors.ftl</result>
+        </action>
+
+        <action name="aboutus" class="site.aboutUsAction" method="aboutus">
+            <result name="input">/web/site/aboutus.ftl</result>
+            <result name="success">/web/site/aboutus.ftl</result>
+        </action>
+
+        <action name="contactus" class="site.contactUsAction" method="contactus">
+            <result name="input">/web/site/contactus.ftl</result>
+            <result name="success">/web/site/contactus.ftl</result>
+        </action>
+
+        <action name="disclaimer" class="site.disclaimerAction" method="disclaimer">
+            <result name="input">/web/site/disclaimer.ftl</result>
+            <result name="success">/web/site/disclaimer.ftl</result>
+        </action>
+    </package>
+</struts>

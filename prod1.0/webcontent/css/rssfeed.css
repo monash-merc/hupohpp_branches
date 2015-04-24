@@ -1,0 +1,93 @@
+﻿@charset "UTF-8";
+
+.rssFeed {
+    width: 100%;
+    font-size: 12px;
+}
+
+
+.rssHeader {
+    font-size: 14px;
+    font-weight: bold;
+    padding-left: 10px;
+    margin-bottom: 5px;
+    color: #726E4C;
+}
+.rssImg{
+    width: 16px;
+    height: 16px;
+    margin-top: 5px;
+    margin-left: 5px;
+    display: inline-block;
+
+}
+
+.rssHeader a {
+    text-decoration: none;
+    color: #726E4C;
+}
+
+.rssHeader a:hover {
+    color: #002061;
+    text-decoration: underline;
+}
+
+.rssBody {
+    border: 1px solid #F2F2F2;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    -moz-box-shadow: 0 0 5px #F2F2F2;
+    -webkit-box-shadow: 0 0 5px #F2F2F2;
+    box-shadow: 0 0 5px #F2F2F2;
+}
+
+.rssBody a {
+    color: #726E4C;
+    text-decoration: none;
+}
+
+.rssBody a:hover {
+    color: #002061;
+    text-decoration: underline;
+}
+
+
+.rssBody ul {
+    list-style: none;
+}
+
+.rssBody ul, .rssRow, .rssRow h4, .rssRow p {
+    margin: 0;
+    padding: 0;
+}
+
+.rssRow {
+    padding: 5px;
+    background-color: #f9f9f9;
+    border: solid 5px #FFFFFF;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+
+.rssRow h4 {
+    font-size: 1.1em;
+}
+
+.rssRow div {
+    font-size: 90%;
+    color: #666666;
+    margin: 0.2em 0 0.4em 0;
+}
+
+.rssRow .rssMedia {
+    padding: 0.5em;
+    font-size: 1em;
+}
+
+.rssError{
+    padding: 5px;
+    color: #b24f3c;
+    font-size: 11px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
